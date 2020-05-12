@@ -52,7 +52,7 @@ end
 class Convert # 小規模の変換等の機能の格納
 
   def self.num_str(num,s) # 数字 -> 各文字
-    list = [["SORT", "LIST", "CONF", "QUIT"],
+    list = [["SCORE", "CONF", "QUIT"],
             ['YEAR','MONTH','DAY','HOUR','MINUTE'],
             ['EXT','SIZE','DATE']]
     list = list[s]
@@ -65,7 +65,7 @@ class Convert # 小規模の変換等の機能の格納
   def self.num_mode(num) # 数字 -> モード
     num_str(num,0)
   end
-
+=begin
   def self.num_date(num) # 数字 -> 時間単位
     num_str(num,1)
   end
@@ -73,7 +73,7 @@ class Convert # 小規模の変換等の機能の格納
   def self.num_class(num) # 数字 -> 分類方法
     num_str(num,2)
   end
-  
+=end
 
   def self.num_color(num) # 数字 -> 色
     if num.to_i >=0 && num.to_i <=8

@@ -2,7 +2,7 @@
 class Score < Col # 移動先の変更を行う
 
   def self.main(list, opt)
-    if opt[:c].include?("NONE") # NONE時はここで入力
+    if opt[:s].include?("NONE") # NONE時はここで入力
       tmp = []; c = "" # 一時変数
       cputs ['input classification (1:EXT, 2:SIZE, 3:DATE (e.g. 1 -> 2)) stop: e ',3]
       tmp.push(Convert.num_class(c)) while (c = Col.cgets) != "e" 

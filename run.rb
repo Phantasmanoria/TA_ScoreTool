@@ -10,8 +10,8 @@ require 'fileutils' # ファイル操作
 path = File.expand_path('./lib')
 require path + "/convert"
 require path + "/opt"
-require path + "/io"
-require path + "/exec"
+#require path + "/io"
+require path + "/score"
 require path + "/display"
 require path + "/log"
 
@@ -19,7 +19,7 @@ require path + "/log"
 
 option = Opt.new # オプション取得
 opt = option.param
-files = InOut.new(opt) # 入力リスト読み取り
+#files = InOut.new(opt) # 入力リスト読み取り
 
 if opt[:l] # ログ機能の使用
   time = Time.now.strftime("%Y%m%d-%H%M%S") # 時間取得
@@ -35,8 +35,7 @@ end
 Col.cputs "START #{opt[:m]} MODE!" # モード選択宣言
 
 if opt[:m] == "SCORE" 
-  files.list = Score.main(files.list,opt)
-  files.output(opt)
+  Score.main(opt)
 elsif opt[:m] == "CONF"
   Display.conf(opt)
 elsif opt[:m] == "QUIT"

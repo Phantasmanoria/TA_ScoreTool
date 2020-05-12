@@ -26,11 +26,9 @@ class Opt < Col
 
     begin
       opt.on('-p [NUMBER]',/^[1-3]$/,
-             'prog lecture number (1,2,3)(default:NONE)')  {|v| params[:p] = v}
-      opt.on('-t [NUMBER]',/^[0-9]+\_[0-9]+$/,
+             'prog lecture number (1,2,3)(default:2)')  {|v| params[:p] = v}
+      opt.on('-t [NUMBER]',/^[0-9]+[A-B]*\_[0-9]+$/,
              'lecture task number (e.g. 1_2)(default:NONE)')  {|v| params[:t] = v}
-#      opt.on('-d [UNIT]', ['YEAR', 'MONTH', 'DAY', 'HOUR', 'MINUTE', 'NONE'],
-#             'date in -c = DATE(YEAR|MONTH|DAY|HOUR|MINUTE|NONE) (default:NONE)')  {|v| params[:d] = v}
       opt.on('-c [FILE]',
              'config file (default:config.yml)')  {|v| params[:c] = v}
       opt.on('-s [NUMBER, NUMBER, ..]', Array,
@@ -94,14 +92,11 @@ class Opt < Col
     yaml = YAML.load_file(conf) until yaml # 読み込み
     res = {}
     # 情報読み取り
-    res[:i] = yaml["prog_number"] unless yaml["prog_number"].nil?
-    res[:o] = yaml[""] unless yaml["output_folder"].nil?
+    res[:p] = yaml["prog_number"] unless yaml["prog_number"].nil?
+    res[:t] = yaml["task_number"] unless yaml["task_number"].nil?
     res[:m] = yaml["mode"] unless yaml["mode"].nil?
-    res[:s] = yaml["size"] unless yaml["size"].nil?
-    res[:d] = yaml["date"] unless yaml["date"].nil?
-    res[:c] = yaml["classification"] unless yaml["classification"].nil?
+    res[:s] = yaml["student_numbers"] unless yaml["student_numbers"].nil?
     res[:l] = yaml["log"] == "true" ? true : false
-    res[:mv]= yaml["move"] == "true" ? true : false
 
     res[:f] = conft # conf情報上書き
     
@@ -112,15 +107,17 @@ class Opt < Col
   def mkconfig # configファイル作成
     cputs "making config_file ..."
     data = {
-      "input_folders" => ["in"],
-      "output_folder" => "out",
+      "ta_number" => "NONE",
+      "ta_pass" => "NONE", 
+      "prog_number" => "2",
+      "prog_year" => "NONE",
+      "task_number" => "NONE",
       "mode" => "NONE",
-      "date" => "NONE",
-      "size" => "NONE",
-      "classification" => ["NONE"],
+      "student_numbers" => ["NONE"],
       "log" => "false",
-      "move" => "false",
-
+      "compile_gcc" => "gcc",
+      "compile_java" => "javac -encoding utf -8",
+      "compile_gplus" => "g++",
     }
     YAML.dump(data, File.open("config.yml", "w"))
   end
@@ -128,13 +125,12 @@ class Opt < Col
   
   def mix_check(param, yaml) # オプションの統合と有効判定
 
-    optdefault = {:f=>"config.yml", # 最初のopt設定
-                  :i=>["in"],
-                  :o=>"out",
-                  :c=>["NONE"],
-                  :s=>"NONE",
+    optdefault = {:c=>"config.yml", # 最初のopt設定
+                  :p=>"2",
+                  :t=>"NONE",
+                  :m=>"NONE",
+                  :s=>["NONE"],
                   :l=>false,
-                  :mv=>false
                  }
     
     conf = yaml[:f] # fオプションのみ救済
@@ -143,7 +139,7 @@ class Opt < Col
 
 
     err = [] # エラー格納
-
+=begin
     for f_name in res[:i] 
       unless Dir.exist?(f_name) # -iでのフォルダが存在しないとエラー
         cerr "ERROR: input_folder #{f_name} is not exist!"
@@ -209,9 +205,10 @@ class Opt < Col
     end
     
     Display.conf(res,err) if err.length != 0 # エラー内容表示
-    
+=end    
     @params = res
   end
 
+    
 end
 
