@@ -1,30 +1,55 @@
 # coding: utf-8
 class Score < Col # 移動先の変更を行う
 
-  def self.main(list, opt)
+  def self.main(opt)
+    if (opt[:p] == "NONE") # NONE時はここで入力
+      c = "" # 一時変数
+      cputs ['input prog number (1,2,3)',3]
+      if c.nil? # 候補外はエラー
+        cerr "ERROR: input wrong number!"
+        exit 1
+      end
+      opt[:s] = c
+    end
+    if (opt[:l] == "NONE") # NONE時はここで入力
+      c = "" # 一時変数
+      cputs ['input prog year (e.g. 2020)',3]
+      if c.nil? # 候補外はエラー
+        cerr "ERROR: input wrong number!"
+        exit 1
+      end
+      opt[:l] = c
+    end
+    if (opt[:t]] == "NONE") # NONE時はここで入力
+      c = "" # 一時変数
+      cputs ['input lecture task number (e.g. 1_3)',3]
+      if c.nil? # 候補外はエラー
+        cerr "ERROR: input wrong number!"
+        exit 1
+      end
+      opt[:t] = c
+    end
     if opt[:s].include?("NONE") # NONE時はここで入力
       tmp = []; c = "" # 一時変数
-      cputs ['input classification (1:EXT, 2:SIZE, 3:DATE (e.g. 1 -> 2)) stop: e ',3]
-      tmp.push(Convert.num_class(c)) while (c = Col.cgets) != "e" 
+      cputs ['input student numbers ((e.g. 1234 -> 1239)) stop: e ',3]
+      tmp.push(c) while (c = Col.cgets) != "e" 
 
-      j = ["EXT", "SIZE", "DATE"] # 検証
       tmp.each do |sort|
         if sort.nil? # 候補外はエラー
-          cerr "ERROR: input wrong sort!"
+          cerr "ERROR: input wrong numbers!"
           exit 1
         end
       end
-      opt[:c] = tmp
+      opt[:s] = tmp
     end
     
-    for sort in opt[:c] # 各ソートを実行
-      cputs "START #{sort} SORT!"
+    for sort in opt[:s] # 各ソートを実行
+      cputs "START #{sort} "
       list = ext(list, opt)  if sort == "EXT"
       list = size(list, opt) if sort == "SIZE"
       list = date(list, opt) if sort == "DATE"
     end
 
-    list
   end
 
   

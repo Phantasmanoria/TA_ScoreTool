@@ -109,7 +109,7 @@ class Opt < Col
     data = {
       "ta_number" => "NONE",
       "ta_pass" => "NONE", 
-      "prog_number" => "2",
+      "prog_number" => Time.new.year,
       "prog_year" => "NONE",
       "task_number" => "NONE",
       "mode" => "NONE",
